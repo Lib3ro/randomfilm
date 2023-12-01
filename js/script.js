@@ -1,21 +1,27 @@
-// script.js
+function generateRandomMovie() {
+  const imdbId = document.getElementById("imdbId").value;
+  const apiUrl = `/api/randomMovie?imdbId=${imdbId}`;
 
-async function getRandomMovie() {
-    try {
-        const response = await fetch('{{BACKEND_URL}}/random-movie/ls566007104');
-        const movieDetails = await response.json();
-        displayMovieDetails(movieDetails);
-    } catch (error) {
-        console.error('Errore durante la richiesta al backend:', error);
-    }
+  // Simulate fetching the CSV file (replace with actual fetch call)
+  // For security reasons, you may need a server-side component to fetch the CSV
+  fetch(apiUrl)
+    .then((response) => response.json())
+    .then((movieDetails) => {
+      displayResult(movieDetails);
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+      displayResult("Error fetching data. Please try again.");
+    });
 }
 
-function displayMovieDetails(movie) {
-    const movieDetailsContainer = document.getElementById('movieDetails');
-    movieDetailsContainer.innerHTML = `
-        <h2>${movie.title}</h2>
-        <p><strong>Anno:</strong> ${movie.release_date}</p>
-        <p><strong>Voto:</strong> ${movie.vote_average}</p>
-        <p><strong>Descrizione:</strong> ${movie.overview}</p>
+function displayResult(movieDetails) {
+  const resultContainer = document.getElementById("result");
+  resultContainer.innerHTML = `
+        <p>Title: ${movieDetails.title}</p>
+        <p>Genre: ${movieDetails.genre}</p>
+        <p>Duration: ${movieDetails.duration} minutes</p>
+        <p>Year: ${movieDetails.year}</p>
+        <img src="${movieDetails.poster}" alt="${movieDetails.title} Poster" width="200">
     `;
 }
